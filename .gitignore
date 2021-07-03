@@ -1,0 +1,17 @@
+*.pyc
+*.pem
+*.pub
+*.tar.gz
+*.zip
+*.sql
+*.db
+secrets.txt
+./tmp
+./build/*
+.idea/*
+.idea
+__pycache__/*
+env
+venv
+.vscode
+db/

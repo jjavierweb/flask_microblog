@@ -1,37 +1,38 @@
-from app import login
-from sqlalchemy.orm import backref
-from app import db  
 from datetime import datetime
-from werkzeug.security import generate_password_hash, check_password_hash
+from app import db, login
 from flask_login import UserMixin
+from werkzeug.security import generate_password_hash, check_password_hash
+
 
 class User(UserMixin, db.Model):
-  id = db.Column(db.Integer, primary_key=True)
-  username = db.Column(db.String(64), index=True, unique=True)
-  email = db.Column(db.String(120), index=True, unique=True)
-  password_hash = db.Column(db.String(128))
-  posts = db.relationship('Post', backref='author', lazy='dynamic')
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(64), index=True, unique=True)
+    email = db.Column(db.String(120), index=True, unique=True)
+    password_hash = db.Column(db.String(128))
+    posts = db.relationship('Post', backref='author', lazy='dynamic')
     
-  def __repr__(self):
-      return f'<User {self.username} >'
+    def __repr__(self):
+        return f'<User {self.username} >'
 
-  # create funtion to generate password hash
-  def set_password(self, password):
-    self.password_hash = generate_password_hash(password)
+    # create function to generate password hash
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
 
-  # create funtion to compare password hash
-  def check_password(self, password):
-    return check_password_hash(self.password_hash, password)
+    # create function to compare password hash
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
 
 class Post(db.Model):
-  id = db.Column(db.Integer, primary_key=True)
-  body = db.Column(db.String(140))
-  timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-  user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    id = db.Column(db.Integer, primary_key=True)
+    body = db.Column(db.String(140))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-  def __repr__(self):
-      return f'<Post {self.body}>'
+    def __repr__(self):
+        return f'<Post {self.body}>'
+
 
 @login.user_loader
-def load_user(id):
-  return User.query.get(int(id))
+def load_user(user_id):
+    return User.query.get(int(user_id))

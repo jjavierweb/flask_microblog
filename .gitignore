@@ -15,4 +15,4 @@ env
 venv
 .vscode
 db/
-logs
+**/logs

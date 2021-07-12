@@ -1,3 +1,4 @@
+from typing import Text
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
@@ -57,4 +58,11 @@ class EditorProfileForm(FlaskForm):
 
 
 class EmtpyForm(FlaskForm):
+    submit = SubmitField('Submit')
+
+
+class PostForm(FlaskForm):
+    post = TextAreaField('Say something', validators=[
+        DataRequired(), Length(min=1, max=140)
+    ])
     submit = SubmitField('Submit')
